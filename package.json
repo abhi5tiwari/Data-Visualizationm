@@ -1,0 +1,25 @@
+{
+  "name": "library-resources-dashboard",
+  "version": "1.0.0",
+  "description": "Library Resources Data Visualization Dashboard (Simplified)",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js"
+  },
+  "keywords": [
+    "library",
+    "dashboard",
+    "data-visualization",
+    "express",
+    "sqlite"
+  ],
+  "author": "Developer",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "sqlite3": "^5.1.7"
+  }
+}

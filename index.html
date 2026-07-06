@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Resource Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div>
+                <div class="sidebar-brand">
+                    <i class="fa-solid fa-book-open"></i>
+                    <h2>LibManage</h2>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="active"><a href="#"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fa-solid fa-book"></i> Books Inventory</a></li>
+                    <li><a href="#"><i class="fa-solid fa-file-invoice"></i> Reports</a></li>
+                    <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="theme-toggle-wrapper">
+                    <span>Dark Mode</span>
+                    <label class="theme-switch" for="theme-toggle-checkbox">
+                        <input type="checkbox" id="theme-toggle-checkbox">
+                        <span class="slider">
+                            <i class="fa-solid fa-moon"></i>
+                            <i class="fa-solid fa-sun"></i>
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Panel -->
+        <main class="main-content">
+            <header>
+                <h1>Library Analytics & Resources</h1>
+                <div class="user-profile">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>Admin Panel</span>
+                </div>
+            </header>
+
+            <!-- VIEW 1: DASHBOARD -->
+            <div id="dashboard-view" class="view-section active-view">
+                <section class="stats-container">
+                    <div class="card">
+                        <div class="card-icon blue"><i class="fa-solid fa-layer-group"></i></div>
+                        <div class="card-info">
+                            <h3 id="metric-total-books">0</h3>
+                            <p>Total Books</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon green"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="card-info">
+                            <h3 id="metric-available-books">0</h3>
+                            <p>Available Books</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon orange"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                        <div class="card-info">
+                            <h3 id="metric-borrowed-books">0</h3>
+                            <p>Borrowed Books</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon red"><i class="fa-solid fa-circle-exclamation"></i></div>
+                        <div class="card-info">
+                            <h3 id="metric-overdue-returns">0</h3>
+                            <p>Overdue Returns</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="charts-container">
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-chart-pie"></i> Book Genres Distribution</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="genreChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3><i class="fa-solid fa-chart-line"></i> Monthly Borrowing Trends</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW 2: BOOKS INVENTORY (CRUD) -->
+            <div id="inventory-view" class="view-section">
+                <!-- Add New Book Form -->
+                <section class="form-card">
+                    <h3 class="form-title"><i class="fa-solid fa-plus"></i> Add New Book to Inventory</h3>
+                    <form id="add-book-form">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="book-title-input">Book Title</label>
+                                <input type="text" id="book-title-input" class="form-control" placeholder="e.g. Clean Code" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-author-input">Author</label>
+                                <input type="text" id="book-author-input" class="form-control" placeholder="e.g. Robert C. Martin" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-category-input">Genre / Category</label>
+                                <input type="text" id="book-category-input" class="form-control" placeholder="e.g. Technology" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="book-qty-input">Total Copies</label>
+                                <input type="number" id="book-qty-input" class="form-control" min="1" max="1000" placeholder="10" required>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary" style="width: 100%;"><i class="fa-solid fa-circle-plus"></i> Add Book</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Books List Table -->
+                <section class="report-section">
+                    <div class="report-header">
+                        <h2>Books Catalog Management</h2>
+                        <div class="control-group">
+                            <input type="text" id="inventory-search-input" class="form-control" placeholder="Search catalog..." style="width: 220px;">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>Total Qty</th>
+                                    <th>Available</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-table-body">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW 3: REPORTS -->
+            <div id="reports-view" class="view-section">
+                <section class="report-section">
+                    <div class="report-header">
+                        <h2>System Inventory Reports & Data Logs</h2>
+                        <div class="control-group">
+                            <input type="text" id="report-search-input" class="form-control search-input" placeholder="Search by title, author, or ID...">
+                            <select id="report-category-filter" class="form-control" style="width: 180px;">
+                                <option value="">All Categories</option>
+                            </select>
+                            <button class="btn btn-secondary" onclick="generateReport()" title="Refresh metrics"><i class="fa-solid fa-rotate"></i> Fetch Metrics</button>
+                            <button class="btn btn-primary" onclick="exportCSV()" title="Export list to CSV"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="reportsTable">
+                            <thead>
+                                <tr>
+                                    <th>Book ID</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Category</th>
+                                    <th>Total Qty</th>
+                                    <th>Issued Copies</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-table-body">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW 4: SETTINGS -->
+            <div id="settings-view" class="view-section">
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <h3><i class="fa-solid fa-gears"></i> Dashboard Operations</h3>
+                        <p>Configure and manage the database status and storage allocations for local logs.</p>
+                        
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Reset Dashboard Storage</div>
+                                <div class="setting-desc">Revert all inventories and transaction statistics back to mock seed data.</div>
+                            </div>
+                            <button class="btn btn-danger" onclick="resetDatabase()"><i class="fa-solid fa-trash-arrow-up"></i> Reset DB</button>
+                        </div>
+
+                        <div class="setting-row">
+                            <div>
+                                <div class="setting-label">Sync Status</div>
+                                <div class="setting-desc">Current state is stored locally. Fallback connection is active.</div>
+                            </div>
+                            <span class="badge available">Local Cache Online</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h3><i class="fa-solid fa-circle-info"></i> About LibManage</h3>
+                        <p>A premium modern administration analytics panel designed for librarians to trace library holdings, borrow metrics, and categoric allocations.</p>
+                        <div class="setting-row">
+                            <span class="setting-label">Version</span>
+                            <span style="font-weight: 600; color: var(--text-light);">2.1.0 (Interactive SPA)</span>
+                        </div>
+                        <div class="setting-row">
+                            <span class="setting-label">Aesthetic Styling</span>
+                            <span style="font-weight: 600; color: var(--primary-color);">Glassmorphic Indigo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Edit Book Modal -->
+    <div id="edit-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fa-solid fa-pen-to-square"></i> Edit Book Details</h3>
+                <button class="modal-close" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="edit-book-form">
+                <input type="hidden" id="edit-book-id">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="edit-book-title">Book Title</label>
+                    <input type="text" id="edit-book-title" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="edit-book-author">Author</label>
+                    <input type="text" id="edit-book-author" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label for="edit-book-category">Genre / Category</label>
+                    <input type="text" id="edit-book-category" class="form-control" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="edit-book-qty">Total Copies</label>
+                    <input type="number" id="edit-book-qty" class="form-control" min="1" max="1000" required>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Overlay -->
+    <div class="toast-container"></div>
+
+    <!-- Javascript links -->
+    <script src="script.js" defer></script>
+</body>
+</html>
